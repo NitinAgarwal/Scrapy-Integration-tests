@@ -25,12 +25,11 @@ Vagrant.configure("2") do |config|
 
   # Customization
   config.vm.customize [
-  		'modifyvm', :id,
+        'modifyvm', :id,
         '--name', hostname,
         '--memory', ram
       ]
   end
-  
 
   config.vm.provider :virtualbox do |vb, override|
   end
