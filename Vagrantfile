@@ -2,14 +2,18 @@
 
 box = "ubuntu"
 url = "http://files.vagrantup.com/precise64.box"
-hostname = ""
-ip = ""
-ram = ""
+hostname = "scrapy-gsoc2014-it"
+ram = "512"
 
 
-Vagrant.configure("2") do |config|
+# Below configurations are only for Vagrant 1.0.x version.
+
+# For Vagrant 1.x just change the configuration settings to 
+# Vagrant.configure("2") do |config|
+  
+Vagrant::Config.run do |config|
   # All Vagrant configuration is done here.
-
+  
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = box
 
@@ -19,9 +23,6 @@ Vagrant.configure("2") do |config|
   
   # Hostname
   config.vm.host_name = hostname
-  
-  # Assign this VM to a host only network IP, allowing you to access it via the IP.
-  config.vm.network :hostonly, ip
 
   # Customization
   config.vm.customize [
@@ -29,23 +30,12 @@ Vagrant.configure("2") do |config|
         '--name', hostname,
         '--memory', ram
       ]
-  end
-
-  config.vm.provider :virtualbox do |vb, override|
-  end
-
-
-  config.vm.provision "docker" do |docker|
-    docker.pull_images "pathod" 
   
-  	docker.run "pathod",
-  	  # If not specified, then the container's default command will be used
-  	  cmd: "bash -l",
-  	  
-  	  # Extra arguments for 'docker run' on the command line
-  	  args: "-v '/vagrant:/var/www'"
-  	
+  # Docker Provision can automatically install docker, pull docker containers
+  # and configure certain containers to run on boot.
+  config.vm.provision "docker" do |docker|
+    # Pulling images
+    docker.pull_images "ubuntu" 
   end  
 end
-
 
