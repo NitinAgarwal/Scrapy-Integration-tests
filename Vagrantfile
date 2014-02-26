@@ -6,13 +6,16 @@ hostname = "scrapy-gsoc2014-it"
 ram = "512"
 
 
-# Below configurations are only for Vagrant 1.0.x version.
-
-# For Vagrant 1.x just change the configuration settings to 
-# Vagrant.configure("2") do |config|
+# Make sure you have the latest version of Vagrant 1.4.3 and Virtualbox 4.3.6 installed in your system before running this Vagrantfile.
   
-Vagrant::Config.run do |config|
+Vagrant::configure("2") do |config|
   # All Vagrant configuration is done here.
+
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = "http://proxy.iiit.ac.in:8080/"
+    config.proxy.https    = "http://proxy.iiit.ac.in:8080/"
+    config.proxy.no_proxy = "localhost,127.0.0.1"
+  end
   
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = box
@@ -24,13 +27,11 @@ Vagrant::Config.run do |config|
   # Hostname
   config.vm.host_name = hostname
 
-  # Customization
-  config.vm.customize [
-        'modifyvm', :id,
-        '--name', hostname,
-        '--memory', ram
-      ]
-  
+  config.vm.provider "virtualbox" do |v| 
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
+
   # Docker Provision can automatically install docker, pull docker containers
   # and configure certain containers to run on boot.
   config.vm.provision "docker" do |docker|
@@ -38,4 +39,3 @@ Vagrant::Config.run do |config|
     docker.pull_images "ubuntu" 
   end  
 end
-
