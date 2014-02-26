@@ -11,6 +11,8 @@ ram = "512"
 Vagrant::configure("2") do |config|
   # All Vagrant configuration is done here.
 
+  # Make sure you have installed vagrant-proxyconf plugin
+  # vagrant plugin install vagrant-proxyconf
   if Vagrant.has_plugin?("vagrant-proxyconf")
     config.proxy.http     = "http://proxy.iiit.ac.in:8080/"
     config.proxy.https    = "http://proxy.iiit.ac.in:8080/"
