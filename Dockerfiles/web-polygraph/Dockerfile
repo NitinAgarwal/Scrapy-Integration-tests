@@ -4,6 +4,8 @@ FROM ubuntu
 
 MAINTAINER Nitin Agarwal, nitinagarwal3006@gmail.com
 
+ENV http_proxy "http://proxy.iiit.ac.in:8080/"
+
 RUN apt-get update
 RUN apt-get install -y wget
 
